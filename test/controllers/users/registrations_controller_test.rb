@@ -44,5 +44,4 @@ class Users::RegistrationsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:user)
     assert_not_nil assigns(:user).errors
   end
-
 end
