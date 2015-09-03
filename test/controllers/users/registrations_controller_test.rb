@@ -11,6 +11,7 @@ class Users::RegistrationsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:user)
+    assert_select 'form'
   end
 
   ## == Create

@@ -6,11 +6,6 @@ class StaticPagesControllerTest < ActionController::TestCase
   test "should get index" do
     get :index
     assert_response :success
+    assert_select 'title', full_title('Welcome')
   end
-
-  test "should see 'Welcome'" do
-    get :index
-    assert_select 'h1', "Welcome to PassIt"
-  end
-
 end
