@@ -22,12 +22,21 @@
 #
 
 class User < ActiveRecord::Base
+
+  before_save { |user| user.username = user.username.downcase }
+  before_save { |user| user.email = user.email.downcase }
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :omniauthable, :validatable and :trackable
   devise :database_authenticatable,
          :registerable,
          :rememberable,
-         :recoverable
+         :recoverable,
+         :authentication_keys => [:login]
+
+  ## == ATTRIBUTES
+  # Virtual attribute for authenticating by either username or email
+  attr_accessor :login
 
   ## == PARAMETERS
 
@@ -36,18 +45,41 @@ class User < ActiveRecord::Base
 
   ## == Validations
 
-  validates :name, length: { in: 1..50  }, format: { with: /\A[^0-9`!@#\$%\^&*+_=]+\z/ }
-  validates :surname, length: { in: 1..50  }, format: { with: /\A[^0-9`!@#\$%\^&*+_=]+\z/ }
-  validates :username, length: { in: 1..20 }, presence: true, uniqueness: true,
+  validates :name,
+            length: { in: 1..50  },
+            format: { with: /\A[^0-9`!@#\$%\^&*+_=]+\z/ }
+  validates :surname,
+            length: { in: 1..50  },
+            format: { with: /\A[^0-9`!@#\$%\^&*+_=]+\z/ }
+  validates :username,
+            length: { in: 1..20 },
+            presence: true,
+            uniqueness: { :case_sensitive => false },
             format: { with: /\A[a-z\-_0-9]+\z/i }
-  validates :email, presence: true, uniqueness: true,
+  validates :email,
+            presence: true,
+            uniqueness: { :case_sensitive => false },
             format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
-  validates :password, presence: true, confirmation: true,
+  validates :password,
+            presence: true,
+            confirmation: true,
             format: { with: /\A^(?=.*[A-Z])(?=.*[0-9]).{#{@min_password_length},}$\z/ }
 
   ## == GETTERS
 
   def self.min_password_length
     @min_password_length
+  end
+
+  ## == CUSTOM LOGIN
+
+  def self.find_for_database_authentication(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      where(conditions.to_hash).where(["username = :value OR email = :value", { :value => login.downcase }]).first
+    else
+      conditions[:email].downcase! if conditions[:email]
+      where(conditions.to_hash).first
+    end
   end
 end

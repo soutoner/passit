@@ -41,6 +41,11 @@ gem 'bootstrap-sass', '~> 3.3.5'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+  # Testing frameworks
+  gem 'rspec-rails', '~> 3.0'
+  gem 'capybara'
+  # Faking users
+  gem 'factory_girl_rails', '~> 4.0'
 end
 
 group :development do
