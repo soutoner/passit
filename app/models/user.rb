@@ -51,12 +51,13 @@ class User < ActiveRecord::Base
 
   ## == Validations
 
+  # Save
   validates :name,
-            length: { in: 1..50  },
-            format: { with: /\A[^0-9`!@#\$%\^&*+_=]+\z/ }
+            length: { maximum: 50  },
+            format: { with: /\A[^0-9`!@#\$%\^&*+_=]*\z/ }
   validates :surname,
-            length: { in: 1..50  },
-            format: { with: /\A[^0-9`!@#\$%\^&*+_=]+\z/ }
+            length: { maximum: 50  },
+            format: { with: /\A[^0-9`!@#\$%\^&*+_=]*\z/ }
   validates :username,
             length: { in: 1..20 },
             presence: true,
@@ -66,15 +67,22 @@ class User < ActiveRecord::Base
             presence: true,
             uniqueness: { :case_sensitive => false },
             format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
+  validates_attachment :avatar,
+                       content_type: { content_type: ['image/jpeg', 'image/gif', 'image/png'] },
+                       size: { in: 0..50.kilobytes },
+                       :unless => Proc.new {|m| m[:avatar].nil?}
+
+  # Create
   validates :password,
             presence: true,
             confirmation: true,
             format: { with: /\A^(?=.*[A-Z])(?=.*[0-9]).{#{@min_password_length},}$\z/ }, on: :create
+
+  # Update
   validates :password,
             presence: true,
             confirmation: true,
             format: { with: /\A^(?=.*[A-Z])(?=.*[0-9]).{#{@min_password_length},}$\z/ }, on: :update, allow_blank: true
-  validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
   ## == GETTERS
 

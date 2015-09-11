@@ -4,10 +4,15 @@ RSpec.describe Users::RegistrationsController do
 
   before :all do
     @user = attributes_for(:user)
+    @db_user = create(:user, username: 'dbuser' , email: 'dbuser@example.com')
   end
 
   before :each do
     @request.env["devise.mapping"] = Devise.mappings[:user]
+  end
+
+  after :all do
+    @db_user.destroy
   end
 
   describe "GET #new" do
@@ -32,7 +37,7 @@ RSpec.describe Users::RegistrationsController do
     it "should create user" do
       expect{
         post :create, user: @user
-      }.to change{User.count}.from(0).to(1)
+      }.to change{User.count}.from(User.count).to(User.count+1)
       expect(response).to redirect_to user_path(assigns(:user))
       expect(flash[:notice]).to eq('Welcome! You have signed up successfully.')
     end
@@ -45,6 +50,79 @@ RSpec.describe Users::RegistrationsController do
       expect(response).to render_template(:new)
       expect(assigns(:user)).not_to be_nil
       expect(assigns(:user).errors).not_to be_nil
+    end
+  end
+
+  describe "PUT #update_profile" do
+    it "should update avatar if given" do
+      sign_in @db_user
+      file = fixture_file_upload('spec/fixtures/files/test.jpg', 'image/jpeg')
+      expect{
+        put :update_profile, user: { avatar: file }
+      }.to change{User.find(@db_user.id).avatar}
+    end
+
+    it "should update name if given" do
+      sign_in @db_user
+      expect{
+        put :update_profile, user: { name: 'Nuevo nombre' }
+      }.to change{User.find(@db_user.id).name}.from(@db_user.name).to('Nuevo nombre')
+    end
+
+    it "should update surname if given" do
+      sign_in @db_user
+      expect{
+        put :update_profile, user: { surname: 'Apellido' }
+      }.to change{User.find(@db_user.id).surname}.from(@db_user.surname).to('Apellido')
+    end
+
+    it "should not update name if not valid" do
+      sign_in @db_user
+      expect{
+        put :update_profile, user: { name: 'Nuevo nombre$$%' }
+      }.not_to change{User.find(@db_user.id).name}
+    end
+
+    it "should not update surname if not valid" do
+      sign_in @db_user
+      expect{
+        put :update_profile, user: { surname: 'Apellido$$%' }
+      }.not_to change{User.find(@db_user.id).surname}
+    end
+  end
+
+  describe "PUT #password_profile" do
+    it "should update password name if given" do
+      sign_in @db_user
+      expect{
+        put :update_password, user: {
+                                password: 'newpassword6Y',
+                                password_confirmation: 'newpassword6Y',
+                                current_password: @db_user.password
+                            }
+      }.to change{User.find(@db_user.id).encrypted_password}
+    end
+
+    it "should not update password if given confirmation doesnt match" do
+      sign_in @db_user
+      expect{
+        put :update_password, user: {
+                                password: 'newpassword6Y',
+                                password_confirmation: 'nesword6Y',
+                                current_password: @db_user.password
+                            }
+      }.not_to change{User.find(@db_user.id).encrypted_password}
+    end
+
+    it "should not update password if bad current password" do
+      sign_in @db_user
+      expect{
+        put :update_password, user: {
+                                password: 'newpassword6Y',
+                                password_confirmation: 'newpassword6Y',
+                                current_password: 'foo'
+                            }
+      }.not_to change{User.find(@db_user.id).encrypted_password}
     end
   end
 end
