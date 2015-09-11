@@ -2,9 +2,17 @@ Rails.application.routes.draw do
   root 'static_pages#index'
 
   devise_for :users, controllers: {
-                       registrations: 'users/registrations',
                        sessions:      'users/sessions'
-                   }
+                   }, skip: [:registrations]
+  as :user do
+    post '/users' => 'users/registrations#create', :as => :user_registration
+    get '/users/sign_up' => 'users/registrations#new', :as => :new_user_registration
+    get '/users/edit' => 'users/registrations#edit', :as => :edit_user_registration
+    patch '/users/' => 'users/registrations#update'
+    put '/users/update/profile' => 'users/registrations#update_profile'
+    put '/users/update/password' => 'users/registrations#update_password'
+    delete '/users/' => 'users/registrations#destroy'
+  end
   resources :users, only: [:index, :show]
 
   # The priority is based upon order of creation: first created -> highest priority.

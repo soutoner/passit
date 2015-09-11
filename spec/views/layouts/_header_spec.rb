@@ -23,7 +23,7 @@ RSpec.describe "layouts/_header" do
 
       expect(rendered).to have_content user.username
       expect(rendered).to have_link('Profile', href: user_path(user))
-      expect(rendered).to have_link('Edit Profile', href: edit_user_registration_path)
+      expect(rendered).to have_link('Settings', href: edit_user_registration_path)
       expect(rendered).to have_link('Logout', href: destroy_user_session_path)
     end
   end

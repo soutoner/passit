@@ -14,6 +14,10 @@
 #  reset_password_token   :string(255)
 #  reset_password_sent_at :datetime
 #  remember_created_at    :datetime
+#  avatar_file_name       :string(255)
+#  avatar_content_type    :string(255)
+#  avatar_file_size       :integer
+#  avatar_updated_at      :datetime
 #
 # Indexes
 #
@@ -37,6 +41,8 @@ class User < ActiveRecord::Base
   ## == ATTRIBUTES
   # Virtual attribute for authenticating by either username or email
   attr_accessor :login
+  # Paperclip avatar
+  has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: 'http://placehold.it/300'
 
   ## == PARAMETERS
 
@@ -63,16 +69,17 @@ class User < ActiveRecord::Base
   validates :password,
             presence: true,
             confirmation: true,
-            format: { with: /\A^(?=.*[A-Z])(?=.*[0-9]).{#{@min_password_length},}$\z/ }
+            format: { with: /\A^(?=.*[A-Z])(?=.*[0-9]).{#{@min_password_length},}$\z/ }, on: :create
+  validates :password,
+            presence: true,
+            confirmation: true,
+            format: { with: /\A^(?=.*[A-Z])(?=.*[0-9]).{#{@min_password_length},}$\z/ }, on: :update, allow_blank: true
+  validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
   ## == GETTERS
 
   def self.min_password_length
     @min_password_length
-  end
-
-  def photo
-    read_attribute(:photo) || 'http://placehold.it/300?text=' + read_attribute(:username)
   end
 
   ## == CUSTOM LOGIN

@@ -17,10 +17,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   super
   # end
 
-  # PUT /resource
-  # def update
-  #   super
-  # end
+  # PUT /resource/update/profile
+  def update_profile
+
+  end
+
+  # PUT /resource/update/password
+  def update_password
+
+  end
 
   # DELETE /resource
   # def destroy

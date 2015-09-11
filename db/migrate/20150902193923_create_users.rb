@@ -5,7 +5,6 @@ class CreateUsers < ActiveRecord::Migration
       t.string :surname,  limit: 50
       t.string :username, limit: 20, null: false
       t.string :email,               null: false
-      t.string :photo
 
       t.timestamps null: false
     end

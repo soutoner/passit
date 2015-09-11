@@ -28,6 +28,10 @@ gem 'devise'
 gem 'simplecov', :require => false, :group => :test
 # Bootstrap sass on rails
 gem 'bootstrap-sass', '~> 3.3.5'
+# Bootstrap forms
+gem 'bootstrap_form'
+# File attachment
+gem 'paperclip', '~> 4.3'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
