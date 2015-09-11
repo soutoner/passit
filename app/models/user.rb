@@ -71,6 +71,10 @@ class User < ActiveRecord::Base
     @min_password_length
   end
 
+  def photo
+    read_attribute(:photo) || 'http://placehold.it/300?text=' + read_attribute(:username)
+  end
+
   ## == CUSTOM LOGIN
 
   def self.find_for_database_authentication(warden_conditions)
