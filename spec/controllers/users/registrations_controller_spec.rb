@@ -60,6 +60,7 @@ RSpec.describe Users::RegistrationsController do
       expect{
         put :update_profile, user: { avatar: file }
       }.to change{User.find(@db_user.id).avatar}
+      expect(flash[:notice]).to eq('Your account has been updated successfully.')
     end
 
     it "should update name if given" do
@@ -67,6 +68,7 @@ RSpec.describe Users::RegistrationsController do
       expect{
         put :update_profile, user: { name: 'Nuevo nombre' }
       }.to change{User.find(@db_user.id).name}.from(@db_user.name).to('Nuevo nombre')
+      expect(flash[:notice]).to eq('Your account has been updated successfully.')
     end
 
     it "should update surname if given" do
@@ -74,6 +76,7 @@ RSpec.describe Users::RegistrationsController do
       expect{
         put :update_profile, user: { surname: 'Apellido' }
       }.to change{User.find(@db_user.id).surname}.from(@db_user.surname).to('Apellido')
+      expect(flash[:notice]).to eq('Your account has been updated successfully.')
     end
 
     it "should not update name if not valid" do
@@ -101,6 +104,7 @@ RSpec.describe Users::RegistrationsController do
                                 current_password: @db_user.password
                             }
       }.to change{User.find(@db_user.id).encrypted_password}
+      expect(flash[:notice]).to eq('Your account has been updated successfully.')
     end
 
     it "should not update password if given confirmation doesnt match" do
