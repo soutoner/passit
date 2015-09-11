@@ -40,7 +40,7 @@ RSpec.describe UsersController do
       expect(response).to render_template('show')
     end
 
-    it "loads all of the users into @users" do
+    it "load current user into @user" do
       get :show, id: @user.id
       expect(assigns(:user)).to match(@user)
     end
