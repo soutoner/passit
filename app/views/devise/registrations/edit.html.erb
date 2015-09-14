@@ -24,6 +24,7 @@
             <div class="row">
               <div class="col-md-3">
                 <%= image_tag(current_user.avatar, size: '150') %>
+                <%= link_to 'Delete avatar', destroy_user_avatar_path(resource_name), :method => :delete %>
               </div>
               <div class="col-md-9">
                 <%= f.file_field :avatar %>

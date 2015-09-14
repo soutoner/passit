@@ -64,6 +64,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   super
   # end
 
+  # DELETE /resource/avatar
+  def destroy_avatar
+    self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
+    resource.avatar.destroy
+    resource.save
+    flash[:success] = 'Avatar successfully deleted.'
+    redirect_to :back
+  end
+
   # GET /resource/cancel
   # Forces the session data which is usually expired after sign
   # in to be expired now. This is useful if the user wants to
@@ -91,7 +100,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
 
     def update_profile_params
-      params.require(:user).permit(:name, :surname, :avatar)
+      params.require(:user).permit(:name, :surname, :avatar, :destroy_avatar)
     end
 
     def update_password_params

@@ -129,4 +129,16 @@ RSpec.describe Users::RegistrationsController do
       }.not_to change{User.find(@db_user.id).encrypted_password}
     end
   end
+
+  # describe "DELETE #avatar" do
+  #   it "should delete avatar if requested" do
+  #     sign_in @db_user
+  #     file = fixture_file_upload('spec/fixtures/files/test.jpg', 'image/jpeg')
+  #     put :update_profile, user: { avatar: file }
+  #     expect{
+  #       delete :destroy_avatar
+  #     }.to change(User.find(@db_user.id), 'avatar').to(nil)
+  #     expect(flash[:notice]).to eq('Avatar successfully deleted.')
+  #   end
+  # end
 end

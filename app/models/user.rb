@@ -26,6 +26,7 @@
 #
 
 class User < ActiveRecord::Base
+  include UsersHelper
 
   before_save { |user| user.username = user.username.downcase }
   before_save { |user| user.email = user.email.downcase }
@@ -42,7 +43,7 @@ class User < ActiveRecord::Base
   # Virtual attribute for authenticating by either username or email
   attr_accessor :login
   # Paperclip avatar
-  has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: 'http://placehold.it/300'
+  has_attached_file :avatar, styles: { medium: "300x300>", thumb: "30x30>" }, default_url: :gravatar, :escape_url => false
 
   ## == PARAMETERS
 
@@ -69,7 +70,7 @@ class User < ActiveRecord::Base
             format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
   validates_attachment :avatar,
                        content_type: { content_type: ['image/jpeg', 'image/gif', 'image/png'] },
-                       size: { in: 0..50.kilobytes },
+                       size: { less_than: 50.kilobytes },
                        :unless => Proc.new {|m| m[:avatar].nil?}
 
   # Create
@@ -88,6 +89,10 @@ class User < ActiveRecord::Base
 
   def self.min_password_length
     @min_password_length
+  end
+
+  def gravatar
+    gravatar_for(self)
   end
 
   ## == CUSTOM LOGIN

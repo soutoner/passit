@@ -29,121 +29,142 @@ require 'rails_helper'
 require 'support/factory_girl'
 
 RSpec.describe User do
+  include UsersHelper
+
+  it { should have_attached_file(:avatar) }
+  it { should validate_attachment_content_type(:avatar).
+                  allowing('image/png', 'image/jpeg', 'image/gif') }
 
   before :each do
     @user = build(:user)
   end
 
-  it "should be valid" do
-    expect(@user).to be_valid
+  describe "validations" do
+
+    it "should be valid" do
+      expect(@user).to be_valid
+    end
+
+    ## == Name
+    it "name max length (50)" do
+      @user.name << 'a' * (51 - @user.name.length)
+      expect(@user).not_to be_valid
+    end
+
+    it "name should be valid" do
+      @user.name << '!'
+      expect(@user).not_to be_valid
+    end
+
+    ## == Surname
+    it "surname max length (50)" do
+      @user.surname << 'a' * (51 - @user.surname.length)
+      expect(@user).not_to be_valid
+    end
+
+    it "surname should be valid" do
+      @user.surname << '!'
+      expect(@user).not_to be_valid
+    end
+
+    ## == Username
+    it "should have username" do
+      @user.username = ''
+      expect(@user).not_to be_valid
+    end
+
+    it "username should be unique" do
+      create(:user)
+      expect(@user).not_to be_valid
+    end
+
+    it "username max length (20)" do
+      @user.username << 'a' * (21 - @user.username.length)
+      expect(@user).not_to be_valid
+    end
+
+    it "username should be valid" do
+      @user.username << '.'
+      expect(@user).not_to be_valid
+    end
+
+    ## == Email
+    it "should have email" do
+      @user.email = ''
+      expect(@user).not_to be_valid
+    end
+
+    it "email should be unique" do
+      create(:user)
+      expect(@user).not_to be_valid
+    end
+
+    it "email should be valid" do
+      @user.email << '@'
+      expect(@user).not_to be_valid
+    end
+
+    ## == Password
+    it "should have password" do
+      @user.password = ''
+      expect(@user).not_to be_valid
+    end
+
+    it "should have confirmation" do
+      @user.password_confirmation = ''
+      expect(@user).not_to be_valid
+    end
+
+    it "password confirmation must match" do
+      @user.password_confirmation = 'foobar6'
+      expect(@user).not_to be_valid
+    end
+
+    it "password should have at least 6 char" do
+      @user.password = 'abc'
+      expect(@user).not_to be_valid
+    end
+
+    it "password should have at least 1 number" do
+      @user.password = 'foobaryY'
+      expect(@user).not_to be_valid
+    end
+
+    it "password should have at least 1 uppercase" do
+      @user.password = 'foobar6y'
+      expect(@user).not_to be_valid
+    end
+
+    it "password should have at least 1 lowercase" do
+      @user.password = 'FOOBAR6Y'
+      expect(@user).not_to be_valid
+    end
+
+    # == Avatar
+    it "default avatar should be gravatar" do
+      gravatar_id = Digest::MD5::hexdigest(@user.email).downcase
+
+      expect(@user.avatar.url).to eq(gravatar_for(@user))
+    end
   end
 
-  ## == Name
-  it "name max length (50)" do
-    @user.name << 'a' * (51 - @user.name.length)
-    expect(@user).not_to be_valid
-  end
+  describe "before save" do
 
-  it "name should be valid" do
-    @user.name << '!'
-    expect(@user).not_to be_valid
-  end
+    # == Username
+    it "username is saved in lowercase" do
+      @user.username = 'FooBarCiTo'
+      expect{
+        @user.save
+      }.to change{@user.username}.from(@user.username).to(@user.username.downcase)
+    end
 
-  ## == Surname
-  it "surname max length (50)" do
-    @user.surname << 'a' * (51 - @user.surname.length)
-    expect(@user).not_to be_valid
-  end
-
-  it "surname should be valid" do
-    @user.surname << '!'
-    expect(@user).not_to be_valid
-  end
-
-  ## == Username
-  it "should have username" do
-    @user.username = ''
-    expect(@user).not_to be_valid
-  end
-
-  it "username should be unique" do
-    create(:user)
-    expect(@user).not_to be_valid
-  end
-
-  it "username max length (20)" do
-    @user.username << 'a' * (21 - @user.username.length)
-    expect(@user).not_to be_valid
-  end
-
-  it "username should be valid" do
-    @user.username << '.'
-    expect(@user).not_to be_valid
-  end
-
-  it "username is saved in lowercase" do
-    @user.username = 'FooBarCiTo'
-    @user.email = 'foobarcito@example.com'
-    @user.save
-    assert_equal 'foobarcito', @user.username
-  end
-
-  ## == Email
-  it "should have email" do
-    @user.email = ''
-    expect(@user).not_to be_valid
-  end
-
-  it "email should be unique" do
-    create(:user)
-    expect(@user).not_to be_valid
-  end
-
-  it "email should be valid" do
-    @user.email << '@'
-    expect(@user).not_to be_valid
-  end
-
-  it "email is saved in lowercase" do
-    @user.username = 'foobarcito'
-    @user.email = 'foObarCitO@exAmple.com'
-    @user.save
-    assert_equal 'foobarcito@example.com', @user.email
-  end
-
-  ## == Password
-  it "should have password" do
-    @user.password = ''
-    expect(@user).not_to be_valid
-  end
-
-  it "should have confirmation" do
-    @user.password_confirmation = ''
-    expect(@user).not_to be_valid
-  end
-
-  it "password confirmation must match" do
-    @user.password_confirmation = 'foobar6'
-    expect(@user).not_to be_valid
-  end
-
-  it "password should have at least 6 char" do
-    @user.password = 'abc'
-    expect(@user).not_to be_valid
-  end
-
-  it "password should have at least 1 number" do
-    @user.password = 'foobaryY'
-    expect(@user).not_to be_valid
-  end
-
-  it "password should have at least 1 uppercase" do
-    @user.password = 'foobar6y'
-    expect(@user).not_to be_valid
-  end
-
-  it "password should have at least 1 lowercase" do
-    @user.password = 'FOOBAR6Y'
-    expect(@user).not_to be_valid
+    # == Email
+    it "email is saved in lowercase" do
+      @user.email = 'foObarCitO@exAmple.com'
+      @user.username = 'FooBarCiTo'
+      expect{
+        @user.save
+      }.to change{@user.email}.from(@user.email).to(@user.email.downcase)
+    end
   end
 end

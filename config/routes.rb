@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     put '/users/update/profile' => 'users/registrations#update_profile'
     put '/users/update/password' => 'users/registrations#update_password'
     delete '/users/' => 'users/registrations#destroy'
+    delete '/users/avatar' => 'users/registrations#destroy_avatar', :as => :destroy_user_avatar
   end
   resources :users, only: [:index, :show]
 
