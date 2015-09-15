@@ -63,6 +63,20 @@ Rails.application.configure do
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
+  # Needed by Devise. In production, :host should be set to the actual host of your application.
+  config.action_mailer.default_url_options = { host: 'passit.herokuapp.com' }
+
+  # mailgun
+  config.action_mailer.delivery_method = :smtp
+
+  config.action_mailer.smtp_settings = {
+      :authentication => :plain,
+      :address => 'smtp.mailgun.org',
+      :port => 587,
+      :domain => ENV['mailgun_domain'],
+      :user_name => ENV['mailgun_username'],
+      :password => ENV['mailgun_password']
+  }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).

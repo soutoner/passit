@@ -29,6 +29,8 @@ gem 'bootstrap-sass', '~> 3.3.5'
 gem 'bootstrap_form'
 # File attachment
 gem 'paperclip', '~> 4.3'
+# Secure env variables
+gem 'figaro'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -43,7 +45,7 @@ group :development, :test do
   # Use mysql as the database for Active Record
   gem 'mysql2'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
+  gem 'pry-byebug', platform: [:ruby_20]
   # Testing frameworks
   gem 'rspec-rails', '~> 3.0'
   gem 'capybara'

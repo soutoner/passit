@@ -18,11 +18,16 @@
 #  avatar_content_type    :string(255)
 #  avatar_file_size       :integer
 #  avatar_updated_at      :datetime
+#  confirmation_token     :string(255)
+#  confirmed_at           :datetime
+#  confirmation_sent_at   :datetime
+#  unconfirmed_email      :string(255)
 #
 # Indexes
 #
-#  index_users_on_email     (email) UNIQUE
-#  index_users_on_username  (username) UNIQUE
+#  index_users_on_confirmation_token  (confirmation_token) UNIQUE
+#  index_users_on_email               (email) UNIQUE
+#  index_users_on_username            (username) UNIQUE
 #
 
 class User < ActiveRecord::Base
@@ -35,6 +40,7 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable, :omniauthable, :validatable and :trackable
   devise :database_authenticatable,
          :registerable,
+         :confirmable,
          :rememberable,
          :recoverable,
          :authentication_keys => [:login]
