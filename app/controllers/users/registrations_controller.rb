@@ -70,7 +70,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     resource.avatar.destroy
     resource.save
     flash[:success] = 'Avatar successfully deleted.'
-    redirect_to :back
+    redirect_to after_update_path_for(resource)
   end
 
   # GET /resource/cancel
