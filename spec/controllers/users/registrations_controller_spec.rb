@@ -36,8 +36,8 @@ RSpec.describe Users::RegistrationsController do
         expect{
           post :create, user: @user
         }.to change{User.count}.by(1)
-        expect(response).to redirect_to user_path(assigns(:user))
-        expect(flash[:notice]).to eq('Welcome! You have signed up successfully.')
+        expect(response).to redirect_to root_path
+        expect(flash[:notice]).to eq('A message with a confirmation link has been sent to your email address. Please follow the link to activate your account.')
       end
 
       it "should not create user if invalid" do

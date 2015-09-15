@@ -71,12 +71,12 @@ RSpec.describe "layouts/_messages" do
 
   context "invalid flash" do
 
-    it "it's not displayed" do
+    it "it's displayed as warning" do
       flash[:something] = @messages
 
       render :partial => 'layouts/messages'
 
-      expect(rendered).not_to have_css('div.alert-something')
+      expect(rendered).to have_css('div.alert-warning')
     end
   end
 end

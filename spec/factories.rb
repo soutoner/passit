@@ -8,5 +8,6 @@ FactoryGirl.define do
     sequence(:email) { |n| "theking#{n}@staysking.com" }
     password 'foobar6Y'
     password_confirmation { password }
+    confirmed_at Time.now
   end
 end

@@ -79,7 +79,7 @@ RSpec.describe User do
     end
 
     it "username should be unique" do
-      create(:user)
+      create(:user, username: @user.username)
       expect(@user).not_to be_valid
     end
 
@@ -100,7 +100,7 @@ RSpec.describe User do
     end
 
     it "email should be unique" do
-      create(:user)
+      create(:user, email: @user.email)
       expect(@user).not_to be_valid
     end
 

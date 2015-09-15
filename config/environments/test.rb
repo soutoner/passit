@@ -31,6 +31,9 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
+  # Needed by Devise. In production, :host should be set to the actual host of your application.
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
   # Randomize the order test cases are executed.
   config.active_support.test_order = :random
 
