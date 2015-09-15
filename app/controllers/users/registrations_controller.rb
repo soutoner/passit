@@ -69,7 +69,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
     resource.avatar.destroy
     resource.save
-    flash[:success] = 'Avatar successfully deleted.'
+    flash[:notice] = 'Avatar successfully deleted.'
     redirect_to after_update_path_for(resource)
   end
 

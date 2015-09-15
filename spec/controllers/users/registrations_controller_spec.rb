@@ -143,6 +143,13 @@ RSpec.describe Users::RegistrationsController do
       end
     end
 
+    describe "DELETE #destroy" do
+      it "should delete user" do
+        delete :destroy
+        expect{User.find(@user.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
     describe "DELETE #destroy_avatar" do
       it "should delete avatar if requested" do
         file = fixture_file_upload('spec/fixtures/files/test.jpg', 'image/jpeg')
@@ -150,7 +157,7 @@ RSpec.describe Users::RegistrationsController do
         expect{
           delete :destroy_avatar
         }.to change{User.find(@user.id).avatar_file_name}.from('test.jpg').to(nil)
-        expect(flash[:success]).to eq('Avatar successfully deleted.')
+        expect(flash[:notice]).to eq('Avatar successfully deleted.')
       end
     end
   end
