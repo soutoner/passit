@@ -44,8 +44,6 @@ gem 'figaro'
 group :development, :test do
   # Use mysql as the database for Active Record
   gem 'mysql2'
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'pry-byebug', platform: [:ruby_20]
   # Testing frameworks
   gem 'rspec-rails', '~> 3.0'
   gem 'capybara'

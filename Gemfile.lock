@@ -230,7 +230,6 @@ DEPENDENCIES
   mysql2
   paperclip (~> 4.3)
   pg (= 0.17.1)
-  pry-byebug
   rails (= 4.2.4)
   rails_12factor (= 0.0.2)
   rspec-rails (~> 3.0)

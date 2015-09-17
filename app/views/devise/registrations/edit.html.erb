@@ -72,7 +72,7 @@
           <%= bootstrap_form_for(resource, url: users_update_password_path, html: { method: :put }) do |f| %>
             <%= devise_error_messages! %>
               <%= f.password_field :password,
-                                   help: "Must be at least #{User.min_password_length} characters long",
+                                   help: User.password_constraints,
                                    autocomplete: 'off' %>
 
               <%= f.password_field :password_confirmation,

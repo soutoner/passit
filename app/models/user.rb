@@ -53,8 +53,17 @@ class User < ActiveRecord::Base
 
   ## == PARAMETERS
 
-  # Minimum password length
+  # Minimum password length and constraints
   @min_password_length = 6
+
+  @password_constraints = {
+      length: "Must be at least #{@min_password_length} character long.",
+      contain: [
+          'one number',
+          'one lowercase letter',
+          'one uppercase letter.'
+      ]
+  }
 
   ## == Validations
 
@@ -99,6 +108,12 @@ class User < ActiveRecord::Base
 
   def gravatar
     gravatar_for(self)
+  end
+
+  def self.password_constraints
+    *others, second_last, last = @password_constraints[:contain]
+    second_last << " and #{last}" unless last.nil?
+    "#{@password_constraints[:length]} Must contain: #{(others << second_last).join(', ')}"
   end
 
   ## == CUSTOM LOGIN

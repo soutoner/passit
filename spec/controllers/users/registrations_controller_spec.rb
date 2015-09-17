@@ -32,10 +32,12 @@ RSpec.describe Users::RegistrationsController do
     end
 
     describe "POST #create" do
-      it "should create user" do
+      it "should create user and send email" do
         expect{
           post :create, user: @user
-        }.to change{User.count}.by(1)
+        }.to change{User.count}.by(1) &
+                 change{ActionMailer::Base.deliveries.count}.by(1)
+
         expect(response).to redirect_to root_path
         expect(flash[:notice]).to eq('A message with a confirmation link has been sent to your email address. Please follow the link to activate your account.')
       end
