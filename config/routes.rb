@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     delete '/users/' => 'users/registrations#destroy'
     delete '/users/avatar' => 'users/registrations#destroy_avatar', :as => :destroy_user_avatar
   end
-  resources :users, only: [:index, :show]
+  resources :users, only: [:index, :show], param: :username
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

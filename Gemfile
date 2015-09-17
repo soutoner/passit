@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.4'
 # Use SCSS for stylesheets
@@ -49,6 +48,7 @@ group :development, :test do
   gem 'capybara'
   # Faking users
   gem 'factory_girl_rails', '~> 4.0'
+  gem 'faker'
 end
 
 group :development do

@@ -7,7 +7,6 @@
 #  surname                :string(50)
 #  username               :string(20)       not null
 #  email                  :string(255)      not null
-#  photo                  :string(255)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  encrypted_password     :string(255)      default(""), not null
@@ -51,8 +50,8 @@ RSpec.describe User do
     end
 
     ## == Name
-    it "name max length (50)" do
-      @user.name << 'a' * (51 - @user.name.length)
+    it "name max length (#{User.max_name_length})" do
+      @user.name << 'a' * ((User.max_name_length+1) - @user.name.length )
       expect(@user).not_to be_valid
     end
 
@@ -62,8 +61,8 @@ RSpec.describe User do
     end
 
     ## == Surname
-    it "surname max length (50)" do
-      @user.surname << 'a' * (51 - @user.surname.length)
+    it "surname max length (#{User.max_surname_length})" do
+      @user.surname << 'a' * ((User.max_surname_length+1) - @user.surname.length)
       expect(@user).not_to be_valid
     end
 
@@ -83,8 +82,8 @@ RSpec.describe User do
       expect(@user).not_to be_valid
     end
 
-    it "username max length (20)" do
-      @user.username << 'a' * (21 - @user.username.length)
+    it "username max length (#{User.max_username_length})" do
+      @user.username << 'a' * ((User.max_username_length+1) - @user.username.length)
       expect(@user).not_to be_valid
     end
 
@@ -125,7 +124,7 @@ RSpec.describe User do
       expect(@user).not_to be_valid
     end
 
-    it "password should have at least 6 char" do
+    it "password should have at least #{User.min_password_length} char" do
       @user.password = 'abc'
       expect(@user).not_to be_valid
     end

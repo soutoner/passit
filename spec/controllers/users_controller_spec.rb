@@ -39,18 +39,18 @@ RSpec.describe UsersController do
 
   describe "GET #show" do
     it "responds successfully with an HTTP 200 status code" do
-      get :show, id: @user.id
+      get :show, username: @user.username
       expect(response).to be_success
       expect(response).to have_http_status(200)
     end
 
     it "renders the index template" do
-      get :show, id: @user.id
+      get :show, username: @user.username
       expect(response).to render_template :show
     end
 
     it "load current user into @user" do
-      get :show, id: @user.id
+      get :show, username: @user.username
       expect(assigns(:user)).to match(@user)
     end
   end
