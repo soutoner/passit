@@ -1,4 +1,5 @@
 module DeviseHelper
+
   def devise_error_messages!
     return '' if resource.errors.empty?
 
@@ -11,5 +12,9 @@ module DeviseHelper
     HTML
 
     html.html_safe
+  end
+
+  def current_user?(user)
+     user == current_user
   end
 end

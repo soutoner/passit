@@ -11,3 +11,5 @@
 <% @user.following.each do |user| %>
   <li><%= user.username %></li>
 <% end %>
+
+<%= render partial: 'partials/follow_button', locals: {user: @user} %>

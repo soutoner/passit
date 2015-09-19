@@ -134,21 +134,25 @@ class User < ActiveRecord::Base
   ## == METHODS
 
   def follow(other_user)
+    other_user = User.find(other_user) if !other_user.respond_to?(:id)
     following << other_user
   end
 
   # Unfollows an user
   def unfollow(other_user)
-    following.find(other_user.id).destroy
+    other_user = User.find(other_user) if !other_user.respond_to?(:id)
+    following.delete(other_user)
   end
 
   # Returns true if the current user is following the other user.
   def following?(other_user)
+    other_user = User.find(other_user) if !other_user.respond_to?(:id)
     following.include?(other_user)
   end
 
   # Returns true if the current user is followed by other user.
   def followed?(other_user)
+    other_user = User.find(other_user) if !other_user.respond_to?(:id)
     followers.include?(other_user)
   end
 

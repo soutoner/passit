@@ -1,0 +1,7 @@
+<% unless current_user?(user) %>
+  <% if signed_in? && current_user.following?(user) %>
+    <button class="btn btn-success followButton" rel="<%= user.id %>">Following</button>
+  <% else %>
+    <button class="btn btn-info followButton" rel="<%= user.id %>">Follow</button>
+  <% end %>
+<% end %>
