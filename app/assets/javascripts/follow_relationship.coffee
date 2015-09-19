@@ -26,16 +26,9 @@
       data = 'id=' + button.attr('rel')
 
       if button.hasClass(classes.following) # User already followed
-        unfollowRequest(data)
-        button.removeClass(classes.following);
-        button.removeClass(classes.unfollow);
-        button.addClass(classes.default);
-        button.text('Follow');
+        unfollowRequest(button, data)
       else # User non followed
-        followRequest(data)
-        button.removeClass(classes.default);
-        button.addClass(classes.following);
-        button.text('Following');
+        followRequest(button, data)
     )
 
     # Hover event
@@ -54,7 +47,7 @@
 
     ## Follow/Unfollow AJAX requests
     ## ----------------------------------
-    followRequest = (followedId) ->
+    followRequest = (button, followedId) ->
       $.ajax
         type: 'POST',
         url: urls.request,
@@ -62,10 +55,13 @@
         data: followedId,
         error: (jqXHR, textStatus, errorThrown) ->
           handleAjaxError(jqXHR, textStatus, errorThrown)
-#        success: (data, textStatus, jqXHR) ->
-#          $('body').append "Successful AJAX call: #{data}"
+        success: (data, textStatus, jqXHR) ->
+          $('span.followers').text(data['followers']);
+          button.removeClass(classes.default);
+          button.addClass(classes.following);
+          button.text('Following');
 
-    unfollowRequest = (followedId) ->
+    unfollowRequest = (button, followedId) ->
       $.ajax
         type: 'DELETE',
         url: urls.request,
@@ -73,8 +69,12 @@
         data: followedId,
         error: (jqXHR, textStatus, errorThrown) ->
          handleAjaxError(jqXHR, textStatus, errorThrown)
-#        success: (data, textStatus, jqXHR) ->
-#          $('body').append "Successful AJAX call: #{data}"
+        success: (data, textStatus, jqXHR) ->
+          $('span.followers').text(data['followers']);
+          button.removeClass(classes.following);
+          button.removeClass(classes.unfollow);
+          button.addClass(classes.default);
+          button.text('Follow');
 
     ## Handle AJAX ERROR
     ## ----------------------------------

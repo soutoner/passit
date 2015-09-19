@@ -5,7 +5,12 @@ class FollowRelationshipController < ApplicationController
     current_user.follow(profile)
     respond_to do |format|
       format.html { redirect_to user_path(profile.username) }
-      format.json { render :json => { :success => :true } }
+      format.js   {
+        render :json => {
+                   :success   => :true,
+                   :followers => profile.followers.count
+               }
+      }
     end
   end
 
@@ -14,7 +19,12 @@ class FollowRelationshipController < ApplicationController
     current_user.unfollow(profile)
     respond_to do |format|
       format.html { redirect_to user_path(profile.username) }
-      format.json { render :json => { :success => :true } }
+      format.js   {
+        render :json => {
+                   :success   => :true,
+                   :followers => profile.followers.count
+               }
+      }
     end
   end
 

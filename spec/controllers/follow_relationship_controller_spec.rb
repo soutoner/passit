@@ -21,10 +21,10 @@ RSpec.describe FollowRelationshipController do
       end
     end
 
-    describe "JSON response" do
+    describe "AJAX request" do
       it "loged user must follow given user (by id)" do
         expect{
-          post :create, id: @profile.id, format: :json
+          xhr :post, :create, id: @profile.id
         }.to change{controller.current_user.following?(@profile)}.from(false).to(true)
         expect(response).to have_http_status(200)
         expect(JSON.parse(response.body)['success']).to eq('true')
@@ -43,13 +43,12 @@ RSpec.describe FollowRelationshipController do
       end
     end
 
-    describe "JSON response" do
+    describe "AJAX request" do
       it "loged user must unfollow given user (by id)" do
         controller.current_user.follow(@profile)
         expect{
-          delete :destroy, id: @profile.id, format: :json
+          xhr :delete, :destroy, id: @profile.id
         }.to change{controller.current_user.following?(@profile)}.from(true).to(false)
-        expect(response).to be_success
         expect(response).to have_http_status(200)
         expect(JSON.parse(response.body)['success']).to eq('true')
       end
