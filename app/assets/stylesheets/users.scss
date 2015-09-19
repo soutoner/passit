@@ -1,3 +1,23 @@
 // Place all the styles related to the users controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+#profile-left{
+  img{
+    @include border-radius(2%);
+    height: 70%;
+    width: 70%;
+  }
+
+  hr{ width: 60%; }
+  a { font-size: 26px; }
+  a:hover{ text-decoration: none; }
+}
+

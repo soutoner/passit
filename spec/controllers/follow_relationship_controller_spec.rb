@@ -28,6 +28,7 @@ RSpec.describe FollowRelationshipController do
         }.to change{controller.current_user.following?(@profile)}.from(false).to(true)
         expect(response).to have_http_status(200)
         expect(JSON.parse(response.body)['success']).to eq('true')
+        expect(JSON.parse(response.body)['followers']).to eq(@profile.followers.count)
       end
     end
   end
@@ -51,6 +52,7 @@ RSpec.describe FollowRelationshipController do
         }.to change{controller.current_user.following?(@profile)}.from(true).to(false)
         expect(response).to have_http_status(200)
         expect(JSON.parse(response.body)['success']).to eq('true')
+        expect(JSON.parse(response.body)['followers']).to eq(@profile.followers.count)
       end
     end
   end

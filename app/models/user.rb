@@ -70,7 +70,6 @@ class User < ActiveRecord::Base
   @max_username_length = 20
   @min_password_length = 6
   @max_avatar_size = 50 # in kilobytes
-
   @password_constraints = {
       length: "Must be at least #{@min_password_length} character long.",
       contain: [
@@ -121,14 +120,17 @@ class User < ActiveRecord::Base
     username
   end
 
+  def full_name
+    "#{name} #{surname}"
+  end
+
   def gravatar
     gravatar_for(self)
   end
 
   def self.password_constraints
     *others, second_last, last = @password_constraints[:contain]
-    second_last << " and #{last}" unless last.nil?
-    "#{@password_constraints[:length]} Must contain: #{(others << second_last).join(', ')}"
+    "#{@password_constraints[:length]} Must contain: #{(others << second_last).join(', ')}" << " and #{last}" unless last.nil?
   end
 
   ## == METHODS

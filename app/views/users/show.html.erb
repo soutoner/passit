@@ -1,15 +1,26 @@
 <% provide :title, @user.username %>
 
-<h1><%= @user.username %></h1>
-<p>Find me in app/views/users/show.html.erb</p>
+<div class="row">
+  <div class="col-md-3 text-center" id="profile-left">
+    <img src="<%= @user.avatar %>" class="profile-avatar" >
+    <h3><%= @user.full_name %></h3>
+    <h4>@<%= @user.username %></h4>
+    <hr>
+    <div class="row center-block" style="width:200px;">
+      <div class="col-md-6 col-xs-6">
+        <a href="#" class="followers"><%= @user.followers.count %></a>
+        <p class="help-block">Followers</p>
+      </div>
+      <div class="col-md-6 col-xs-6">
+        <a href="#"><%= @user.following.count %></a>
+        <p class="help-block">Following</p>
+      </div>
+    </div>
+    <hr>
+    <%= render partial: 'partials/follow_button', locals: {user: @user} %>
+  </div>
 
-<h1>Followers <span class="badge followers"><%= @user.followers.count %></span></h1>
-<% @user.followers.each do |user| %>
-  <li><%= user.username %></li>
-<% end %>
-<h1>Following <span class="badge"><%= @user.following.count %></span></h1>
-<% @user.following.each do |user| %>
-  <li><%= user.username %></li>
-<% end %>
-
-<%= render partial: 'partials/follow_button', locals: {user: @user} %>
+  <div class="col-md-9">
+    Profile
+  </div>
+</div>

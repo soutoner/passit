@@ -56,7 +56,7 @@
         error: (jqXHR, textStatus, errorThrown) ->
           handleAjaxError(jqXHR, textStatus, errorThrown)
         success: (data, textStatus, jqXHR) ->
-          $('span.followers').text(data['followers']);
+          $('a.followers').text(data['followers']);
           button.removeClass(classes.default);
           button.addClass(classes.following);
           button.text('Following');
@@ -70,7 +70,7 @@
         error: (jqXHR, textStatus, errorThrown) ->
          handleAjaxError(jqXHR, textStatus, errorThrown)
         success: (data, textStatus, jqXHR) ->
-          $('span.followers').text(data['followers']);
+          $('a.followers').text(data['followers']);
           button.removeClass(classes.following);
           button.removeClass(classes.unfollow);
           button.addClass(classes.default);

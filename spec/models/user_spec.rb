@@ -71,6 +71,11 @@ RSpec.describe User do
       expect(@user).not_to be_valid
     end
 
+    ## == Full name
+    it "should return complete name" do
+      expect(@user.full_name).to eq("#{@user.name} #{@user.surname}")
+    end
+
     ## == Username
     it "should have username" do
       @user.username = ''
